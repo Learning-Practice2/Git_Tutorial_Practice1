@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Geek Joke Generator</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f2f5;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .container {
+            max-width: 800px;  /* Increased from 600px */
+            width: 90%;       /* More responsive width */
+        }
+
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 40px;  /* Increased spacing */
+            font-size: 2.5rem;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
+
+        .joke-display {
+            background-color: white;
+            border-radius: 10px;
+            padding: 30px;        /* Increased padding */
+            margin-bottom: 40px;  /* Increased spacing */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            min-height: 120px;    /* Increased minimum height */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;    /* Slightly larger font */
+            line-height: 1.7;    /* Better line spacing */
+            color: #34495e;
+            border-left: 5px solid #3498db;
+            width: 100%;          /* Full width of container */
+        }
+
+        .btn {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 16px 32px;  /* Slightly larger button */
+            font-size: 1.2rem;    /* Slightly larger font */
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 8px rgba(52, 152, 219, 0.3);
+        }
+
+        .btn:hover {
+            background-color: #2980b9;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(52, 152, 219, 0.4);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .loading {
+            color: #7f8c8d;
+            font-style: italic;
+        }
+
+        .error {
+            color: #e74c3c;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Geek Joke Generator</h1>
+        <div class="joke-display" id="jokeDisplay">
+            Click the button below to get a geek joke!
+        </div>
+        <button class="btn" id="jokeBtn">Get Random Joke</button>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const jokeBtn = document.getElementById('jokeBtn');
+            const jokeDisplay = document.getElementById('jokeDisplay');
+            
+            jokeBtn.addEventListener('click', fetchJoke);
+            
+            async function fetchJoke() {
+                jokeDisplay.textContent = "Loading joke...";
+                jokeDisplay.className = "joke-display loading";
+                
+                try {
+                    const response = await fetch('https://geek-jokes.sameerkumar.website/api?format=json');
+                    
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    
+                    const data = await response.json();
+                    jokeDisplay.textContent = data.joke;
+                    jokeDisplay.className = "joke-display";
+                } catch (error) {
+                    jokeDisplay.textContent = "Failed to fetch joke. Please try again.";
+                    jokeDisplay.className = "joke-display error";
+                    console.error('Error fetching joke:', error);
+                }
+            }
+        });
+    </script>
+</body>
+</html>
